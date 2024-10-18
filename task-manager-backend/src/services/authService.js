@@ -19,6 +19,9 @@ exports.registerUser = async (name, email, password, role) => {
   if (password.length < 6) {
     throw new Error("Password must be at least 6 characters");
   }
+  if (name.length <= 3) {
+    throw new Error("Name field must be greater than 3 characters");
+  }
   // validate email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {

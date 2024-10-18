@@ -21,6 +21,7 @@ exports.createTaskAssignHistoryService = async (
           assignedTo,
           deadline,
         });
+        await taskHistory.save();
         return taskHistory;
       } else {
         throw new Error("Task is already assigned to the user");
@@ -30,6 +31,17 @@ exports.createTaskAssignHistoryService = async (
     }
   } catch (error) {
     throw new Error(error?.message);
+  }
+};
+
+exports.getMyTasks = async (assignedTo) => {
+  try {
+    const tasks = await TaskAssignHistory.find({
+      assignedTo,
+    }).populate("taskId assignedBy");
+    return tasks;
+  } catch (error) {
+    throw new Error(error.message);
   }
 };
 

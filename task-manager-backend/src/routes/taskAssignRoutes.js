@@ -3,7 +3,8 @@ const router = express.Router();
 const userAuthMiddleWare = require("../middlewares/authMiddleware");
 const taskAssignController = require("../controllers/taskAssignController");
 
-router.post("/create", userAuthMiddleWare, taskAssignController.assignTask);
+router.post("/", userAuthMiddleWare, taskAssignController.assignTask);
+router.get("/", userAuthMiddleWare, taskAssignController.getMyTasks);
 
 // router.post("/login", authController.login);
 

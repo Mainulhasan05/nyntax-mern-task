@@ -1,7 +1,7 @@
 const sendResponse = require("../utils/sendResponse.js");
 const taskHistoryService = require("../services/taskHistoryService.js");
 
-exports.assignTask = async (req, res, next) => {
+exports.addHistory = async (req, res, next) => {
   try {
     const { taskId, status, feedback } = req.body;
 
@@ -25,4 +25,10 @@ exports.assignTask = async (req, res, next) => {
   } catch (error) {
     sendResponse(res, 400, false, error.message);
   }
+};
+
+exports.getTaskHistory = async (req, res, next) => {
+  try {
+    const taskId = req.params.taskId;
+  } catch (error) {}
 };
