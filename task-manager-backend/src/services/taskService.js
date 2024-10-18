@@ -13,11 +13,27 @@ exports.createTaskService = async (title, description, createdBy) => {
   }
 };
 
-exports.deleteTaskService = async (taskId) => {
+exports.getAllTasks = async () => {
+  try {
+    const tasks = await Task.find().populate("createdBy");
+  } catch (error) {
+    throw new Error(error?.message);
+  }
+};
+
+exports.deleteTaskService = async (taskId, userId, isAdmin) => {
   try {
     const exists = await Task.findById(taskId);
     if (exists) {
-      const task = await Task.findByIdAndDelete(taskId);
+      if (isAdmin) {
+        const task = await Task.findByIdAndDelete(taskId);
+      } else {
+        if (exists.createdBy == userId) {
+          const task = await Task.findByIdAndDelete(taskId);
+        } else {
+          throw new Error("You don't have permission to delete");
+        }
+      }
     } else {
       throw new Error("Task not found");
     }

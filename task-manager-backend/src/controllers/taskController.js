@@ -1,7 +1,6 @@
 const sendResponse = require("../utils/sendResponse.js");
 const taskService = require("../services/taskService.js");
 
-// Register a new user
 exports.createTask = async (req, res, next) => {
   try {
     const { title, description } = req.body;
@@ -30,7 +29,22 @@ exports.createTask = async (req, res, next) => {
 exports.deleteTask = async (req, res, next) => {
   try {
     const taskId = req.params.id;
-    const task = await taskService.deleteTaskService(taskId);
+    const isAdmin = req.user.role == "admin" ? true : false;
+    const task = await taskService.deleteTaskService(
+      taskId,
+      req.user.id,
+      isAdmin
+    );
+    sendResponse(res, 200, true, "Task Deleted Successfully", null);
+  } catch (error) {
+    sendResponse(res, 500, false, error?.message, null);
+  }
+};
+
+exports.getTaskList = async (req, res, next) => {
+  try {
+    const taskId = req.params.id;
+    const task = await taskService.getAllTasks();
     sendResponse(res, 200, true, "Task Deleted Successfully", null);
   } catch (error) {
     sendResponse(res, 500, false, error?.message, null);
