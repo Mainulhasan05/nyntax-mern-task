@@ -16,7 +16,7 @@ const taskSchema = new mongoose.Schema(
       default: "PENDING",
     },
     createdBy: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },

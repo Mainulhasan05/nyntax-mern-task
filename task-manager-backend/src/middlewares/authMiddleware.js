@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
 
 // Protect routes
-exports.protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
   let token;
 
   if (
@@ -13,8 +12,7 @@ exports.protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      req.user = await User.findById(decoded.id).select("-password");
+      req.user = decoded;
 
       next();
     } catch (error) {
@@ -28,11 +26,4 @@ exports.protect = async (req, res, next) => {
   }
 };
 
-// Admin middleware
-exports.admin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
-    next();
-  } else {
-    res.status(403).json({ message: "Not authorized as an admin" });
-  }
-};
+module.exports = protect;

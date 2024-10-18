@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const taskHistorySchema = new mongoose.Schema(
   {
     taskId: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Task",
       required: true,
     },
     updatedBy: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
