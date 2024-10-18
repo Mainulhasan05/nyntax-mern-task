@@ -1,4 +1,5 @@
 const TaskAssignHistory = require("../models/assignHistory");
+const User = require("../models/userSchema");
 
 exports.createTaskAssignHistoryService = async (
   taskId,
@@ -7,13 +8,26 @@ exports.createTaskAssignHistoryService = async (
   deadline
 ) => {
   try {
-    const taskHistory = new TaskAssignHistory({
-      taskId,
-      assignedBy,
-      assignedTo,
-      deadline,
-    });
-    return taskHistory;
+    const user = await User.findById(assignedTo);
+    if (user) {
+      const alreadyAssigned = await TaskAssignHistory.findOne({
+        assignedTo,
+        taskId,
+      });
+      if (!alreadyAssigned) {
+        const taskHistory = new TaskAssignHistory({
+          taskId,
+          assignedBy,
+          assignedTo,
+          deadline,
+        });
+        return taskHistory;
+      } else {
+        throw new Error("Task is already assigned to the user");
+      }
+    } else {
+      throw new Error("Assigning User Doesn't Exists");
+    }
   } catch (error) {
     throw new Error(error?.message);
   }

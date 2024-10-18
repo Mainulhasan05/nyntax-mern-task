@@ -1,9 +1,9 @@
 const sendResponse = require("../utils/sendResponse.js");
-const taskAssignService = require("../services/taskAssignService.js");
+const taskHistoryService = require("../services/taskHistoryService.js");
 
 exports.assignTask = async (req, res, next) => {
   try {
-    const { taskId, assignedTo, deadline } = req.body;
+    const { taskId, status, feedback } = req.body;
 
     if (req.user.role == "user") {
       sendResponse(
@@ -14,13 +14,13 @@ exports.assignTask = async (req, res, next) => {
         null
       );
     } else {
-      const task = await taskAssignService.createTaskAssignHistoryService(
+      const task = await taskHistoryService.createTaskHistoryService(
         taskId,
         req.user.id,
-        assignedTo,
-        deadline
+        status,
+        feedback
       );
-      sendResponse(res, 201, true, "Task Assigned Successfully", task);
+      sendResponse(res, 201, true, "Task History Addedd Successfully", task);
     }
   } catch (error) {
     sendResponse(res, 400, false, error.message);

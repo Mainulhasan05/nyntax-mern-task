@@ -43,9 +43,8 @@ exports.deleteTask = async (req, res, next) => {
 
 exports.getTaskList = async (req, res, next) => {
   try {
-    const taskId = req.params.id;
-    const task = await taskService.getAllTasks();
-    sendResponse(res, 200, true, "Task Deleted Successfully", null);
+    const tasks = await taskService.getAllTasks();
+    sendResponse(res, 200, true, "Task Fetched Successfully", tasks);
   } catch (error) {
     sendResponse(res, 500, false, error?.message, null);
   }

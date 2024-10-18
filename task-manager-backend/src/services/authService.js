@@ -57,3 +57,12 @@ exports.loginUser = async (email, password) => {
   let token = generateToken(user);
   return token;
 };
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    return users;
+  } catch (error) {
+    throw new Error(error?.message);
+  }
+};
