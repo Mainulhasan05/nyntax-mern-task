@@ -16,10 +16,11 @@ exports.createTaskHistoryService = async (
         feedback,
       });
       await taskHistory.save();
-      await Task.updateOne(
-        { taskId }, // Match condition
-        { $set: { last_status: status } } // Update operation
-      );
+      await Task.findByIdAndUpdate(taskId, {
+        $set: {
+          last_status: status,
+        },
+      });
       return taskHistory;
     } else {
       throw new Error("Task Not Found");
