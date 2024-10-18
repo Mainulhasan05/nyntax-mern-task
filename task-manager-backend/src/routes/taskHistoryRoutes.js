@@ -4,7 +4,11 @@ const userAuthMiddleWare = require("../middlewares/authMiddleware");
 const taskHistoryController = require("../controllers/taskHistoryController");
 
 router.post("/", userAuthMiddleWare, taskHistoryController.addHistory);
-router.get("/:taskId", userAuthMiddleWare, taskHistoryController.getMyTasks);
+router.get(
+  "/:taskId",
+  //   userAuthMiddleWare,
+  taskHistoryController.getTaskHistory
+);
 
 // router.post("/login", authController.login);
 

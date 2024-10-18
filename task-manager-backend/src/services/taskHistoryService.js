@@ -1,20 +1,29 @@
 const TaskHistory = require("../models/taskHistorySchema");
-
+const Task = require("../models/taskSchema");
 exports.createTaskHistoryService = async (
   taskId,
-  submittedBy,
+  updatedBy,
   status,
   feedback
 ) => {
   try {
-    const taskHistory = new TaskHistory({
-      taskId,
-      submittedBy,
-      status,
-      feedback,
-    });
-    await taskHistory.save();
-    return taskHistory;
+    const taskExists = await TaskHistory({ taskId });
+    if (taskExists) {
+      const taskHistory = new TaskHistory({
+        taskId,
+        updatedBy,
+        status,
+        feedback,
+      });
+      await taskHistory.save();
+      await Task.updateOne(
+        { taskId }, // Match condition
+        { $set: { last_status: status } } // Update operation
+      );
+      return taskHistory;
+    } else {
+      throw new Error("Task Not Found");
+    }
   } catch (error) {
     throw new Error(error?.message);
   }
@@ -36,7 +45,7 @@ exports.deleteTaskAssignHistoryService = async (taskId) => {
 exports.getTaskHistory = async (taskId) => {
   try {
     const history = await TaskHistory.find({ taskId }).populate(
-      "taskId submittedBy"
+      "taskId updatedBy"
     );
     return history;
   } catch (error) {

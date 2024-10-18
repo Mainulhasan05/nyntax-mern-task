@@ -5,6 +5,7 @@ const connectDB = require("./db_config/db");
 const authRoutes = require("./routes/authRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const taskAssignRoutes = require("./routes/taskAssignRoutes");
+const taskHistoryRoutes = require("./routes/taskHistoryRoutes");
 
 require("dotenv").config();
 
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/task", taskRoutes);
 app.use("/api/assign", taskAssignRoutes);
+app.use("/api/history", taskHistoryRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
