@@ -12,3 +12,16 @@ exports.createTaskService = async (title, description, createdBy) => {
     throw new Error(error?.message);
   }
 };
+
+exports.deleteTaskService = async (taskId) => {
+  try {
+    const exists = await Task.findById(taskId);
+    if (exists) {
+      const task = await Task.findByIdAndDelete(taskId);
+    } else {
+      throw new Error("Task not found");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

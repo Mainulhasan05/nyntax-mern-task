@@ -26,3 +26,13 @@ exports.createTask = async (req, res, next) => {
     sendResponse(res, 400, false, error.message);
   }
 };
+
+exports.deleteTask = async (req, res, next) => {
+  try {
+    const taskId = req.params.id;
+    const task = await taskService.deleteTaskService(taskId);
+    sendResponse(res, 200, true, "Task Deleted Successfully", null);
+  } catch (error) {
+    sendResponse(res, 500, false, error?.message, null);
+  }
+};
