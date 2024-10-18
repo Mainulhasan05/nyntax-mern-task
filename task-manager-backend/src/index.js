@@ -2,11 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectDB = require("./db_config/db");
-const userRoutes = require("./routes/userRoutes");
-const waterLogRoutes = require("./routes/waterLogRoutes");
 const authRoutes = require("./routes/authRoutes");
-const homeRoutes = require("./routes/homeRoutes");
-const errorHandler = require("./middlewares/errorHandler");
 
 require("dotenv").config();
 
@@ -22,22 +18,17 @@ connectDB();
 app.get("/", (req, res) => {
   // welcome and return the ip address of the client
   res.json({
-    message: "Welcome to the Water Tracker API",
+    message: "Welcome to the Task Manager API",
     ip: req.ip,
   });
 });
 
 // Routes
-app.use("/api/home", homeRoutes);
-app.use("/api", authRoutes);
-app.use("/api", userRoutes);
-app.use("/api", waterLogRoutes);
 
-// Error Handler
-app.use(errorHandler);
+app.use("/api/auth", authRoutes);
 
 // Start Server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
