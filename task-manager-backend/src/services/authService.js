@@ -1,9 +1,10 @@
 const User = require("../models/userSchema");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 // Generate JWT token
-const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+const generateToken = (user) => {
+  return jwt.sign({ id: user?._id, role: user?.role }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };
@@ -25,11 +26,13 @@ exports.registerUser = async (name, email, password, role) => {
   }
 
   // Hash password
-
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);
   // Create new user
   user = new User({
     name,
     email,
+    password: hashPassword,
     role,
   });
 
@@ -52,4 +55,5 @@ exports.loginUser = async (email, password) => {
     throw new Error("Invalid credentials");
   }
   let token = generateToken(user);
+  return token;
 };

@@ -16,3 +16,14 @@ exports.register = async (req, res, next) => {
     sendResponse(res, 400, false, error.message);
   }
 };
+
+// Login a new user
+exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const token = await userAuthService.loginUser(email, password);
+    sendResponse(res, 200, true, "Login Success", { token });
+  } catch (error) {
+    sendResponse(res, 400, false, error.message);
+  }
+};
